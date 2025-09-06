@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat – Conversas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/lux/bootstrap.min.css">
+  <style>
+    #messageList { height: calc(100vh - 300px); overflow-y: auto; background: var(--bs-light); }
+    .emoji-pop { z-index: 2000; position: absolute; transform: translateY(-110%); width: 280px; }
+    .img-thumb { max-width: 160px; max-height: 120px; border-radius: .5rem; border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">Chat App</span>
+    <div class="d-flex align-items-center">
+      <span class="navbar-text me-3">Ativos: <span id="activeCount">0</span></span>
+      <span id="userName" class="navbar-text me-3"></span>
+      <button id="logoutBtn" class="btn btn-outline-light btn-sm">Sair</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid py-3">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-12 col-md-3 col-lg-3">
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="p-3 border-bottom d-flex align-items-center justify-content-between">
+            <strong>Conversas</strong>
+            <button id="newRoomBtn" class="btn btn-sm btn-outline-primary">+ Nova</button>
+          </div>
+          <div class="p-2">
+            <div class="text-uppercase text-muted small mb-2">Salas</div>
+            <ul id="roomList" class="list-group mb-3"></ul>
+
+            <div class="text-uppercase text-muted small mb-2">Diretas</div>
+            <ul id="userList" class="list-group"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="col-12 col-md-9 col-lg-9">
+      <div class="card">
+        <div class="card-body p-0 d-flex flex-column">
+          <div class="p-3 border-bottom bg-white d-flex align-items-center justify-content-between">
+            <h5 id="activeTitle" class="mb-0">Selecione uma conversa</h5>
+            <button id="leaveBtn" class="btn btn-sm btn-outline-danger d-none">Sair da sala</button>
+          </div>
+
+          <div id="messageList" class="p-3"></div>
+
+          <div class="p-3 border-top bg-white">
+            <div id="imgPreview" class="mb-2 d-none">
+              <img id="imgPreviewTag" class="img-thumb" alt="prévia">
+              <button id="clearImgBtn" class="btn btn-sm btn-outline-danger ms-2">remover</button>
+            </div>
+
+            <div class="input-group position-relative">
+              <button id="emojiBtn" class="btn btn-outline-secondary" type="button" title="Emojis">😊</button>
+              <input id="msgInput" class="form-control" placeholder="Escreva uma mensagem..." />
+              <input id="fileInput" type="file" accept="image/*" class="form-control" style="max-width: 240px;">
+              <button id="sendBtn" class="btn btn-primary">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: criar conversa -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" id="createForm">
+      <div class="modal-header">
+        <h5 class="modal-title">Nova conversa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Email do usuário (para abrir DM e salvar na lista)</label>
+          <input class="form-control" name="email" type="email" placeholder="user@exemplo.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nome da sala pública</label>
+          <input class="form-control" name="roomName" placeholder="Usado se o e-mail ficar em branco">
+        </div>
+        <div id="createError" class="alert alert-danger d-none mt-2"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="submit">Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="./chat.js"></script>
+</body>
+</html>
